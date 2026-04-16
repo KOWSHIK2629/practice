@@ -1,0 +1,80 @@
+1. Git Commands
+
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/your-username/student-performance.git
+git push -u origin main
+
+2. Maven Build
+
+mvn clean package
+
+3. Dockerfile
+
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY target/StudentPerformance-1.0-SNAPSHOT.jar app.jar
+CMD ["java", "-jar", "app.jar"]
+
+4. Docker Commands
+
+docker build -t student-performance .
+docker run student-performance
+
+5. Jenkins Pipeline Script
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven'
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-username/student-performance.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'mvn clean package'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                bat 'docker build -t student-performance .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                bat 'docker run student-performance'
+            }
+        }
+    }
+}
+
+6. Kubernetes Deployment (deployment.yaml)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-performance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: student-performance
+  template:
+    metadata:
+      labels:
+        app: student-performance
+    spec:
+      containers:
+      - name: student-performance
+        image: your-dockerhub-username/student-performance
